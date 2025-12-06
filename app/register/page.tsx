@@ -7,8 +7,8 @@ import { z } from "zod";
 const customerSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
 
-  gender: z.enum(["male", "female"], {
-    errorMap: () => ({ message: "Gender is required" }),
+  gender: z.string().refine((val) => val === "male" || val === "female", {
+    message: "Gender is required",
   }),
 
   phone: z

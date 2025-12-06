@@ -3,18 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-<<<<<<< HEAD
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const route = useRouter();
-=======
-import { useRouter, usePathname } from "next/navigation";
-
-export default function Navbar() {
-  const route = useRouter();
-  const pathname = usePathname();
->>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
   const [customer, setCustomer] = useState<{ fullName: string } | null>(null);
 
   // fetch logged-in profile
@@ -43,7 +35,6 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow-md p-4 flex justify-between items-center">
-<<<<<<< HEAD
       <Link href="/customer" className="text-xl font-bold text-blue-600">
         MyApp
       </Link>
@@ -61,44 +52,6 @@ export default function Navbar() {
             className="px-4 py-2 bg-green-500 text-white rounded-lg"
           >
             Register
-=======
-      {/* Left side (Logo) */}
-      <Link href="/customer" className="text-xl font-bold text-blue-600">
-        ShopManagement
-      </Link>
-
-      {/* Center (Search Box - only when not on signin/register) */}
-      {pathname !== "/signin" && pathname !== "/register" && (
-        <div className="flex-1 flex justify-center px-4">
-          <input
-            type="text"
-            placeholder="Search here..."
-            className="w-1/2 border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-      )}
-
-      {/* Right side (Login/Register OR Profile/Logout) */}
-      {!customer ? (
-        <div className="flex items-center space-x-4">
-          <Link
-            href="/signin"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
-          >
-            👤 Login
-          </Link>
-          <Link
-            href="/register"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
-          >
-            📜 Register
-          </Link>
-          <Link
-            href="/customer/addcart"
-            className="text-gray-700 hover:text-blue-600 transition-colors"
-          >
-            🛍️ Cart
->>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
           </Link>
         </div>
       ) : (

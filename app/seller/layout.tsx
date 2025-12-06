@@ -1,9 +1,9 @@
-import Navbar from "@/components/navbar/navbar";
-import Sidebar from "@/components/sidebar";
-import Footer from "@/components/footer";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import axios from "axios";
+import Sidebar from "@/components/seller/sidebar";
+import Navbar from "@/components/seller/navbar/navbar";
+import Footer from "@/components/seller/footer";
 
 export default async function DashboardLayout({
   children,
@@ -16,6 +16,7 @@ export default async function DashboardLayout({
   if (!token) redirect("/signin");
 
   let profile = null;
+  let userData = null;
 
   try {
     const res = await axios.get(
@@ -26,7 +27,12 @@ export default async function DashboardLayout({
     );
 
     profile = res.data;
-    // console.log("Profile data:", profile);
+    // Extract user ID from profile or response
+    userData = {
+      id: profile.id || profile.sellerId, // Adjust based on your API response
+      type: "seller" as const,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: any) {
     redirect("/signin");
   }
@@ -36,7 +42,7 @@ export default async function DashboardLayout({
       <Sidebar className="w-64" />
       <div className="flex-1 flex flex-col ml-64 h-screen">
         <div className="fixed top-0 left-64 right-0 z-50">
-          <Navbar profile={profile} />
+          <Navbar profile={profile} userData={userData} />
         </div>
         <main className="flex-1 mt-16 overflow-auto p-6">{children}</main>
         <Footer />

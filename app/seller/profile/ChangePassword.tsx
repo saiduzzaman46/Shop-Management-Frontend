@@ -13,24 +13,18 @@ const passwordSchema = z.object({
   confirmPassword: z.string().min(8, "Confirm password is required"),
 });
 
+// Validate single field
 const validateField = (name: string, value: any) => {
   const singleFieldSchema =
     passwordSchema.shape[name as keyof typeof passwordSchema.shape];
-
   if (!singleFieldSchema) return "";
-
   const result = singleFieldSchema.safeParse(value);
   return result.success ? "" : result.error.issues[0].message;
 };
 
-const validateForm = (formData: FormData) => {
-  const validationData = {
-    ...Object.fromEntries(formData.entries()),
-    nidImage: formData.getAll("nidImage") as File[],
-  };
-
-  const result = passwordSchema.safeParse(validationData);
-
+// Validate entire form
+const validateForm = (data: Record<string, any>) => {
+  const result = passwordSchema.safeParse(data);
   if (!result.success) {
     const formattedErrors: Record<string, string> = {};
     result.error.issues.forEach((err) => {
@@ -43,10 +37,10 @@ const validateForm = (formData: FormData) => {
 
 export default function ChangePassword({ closeModal }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     const errorMessage = validateField(name, value);
     setErrors((prev) => ({ ...prev, [name]: errorMessage }));
   };
@@ -54,54 +48,56 @@ export default function ChangePassword({ closeModal }: Props) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const validation = validateForm(formData);
+    const formData = new FormData(e.currentTarget);
+    const formJson: Record<string, any> = Object.fromEntries(
+      formData.entries()
+    );
 
-    // console.log(formData);
-
+    const validation = validateForm(formJson);
     if (!validation.success) {
       setErrors(validation.errors);
       return;
     }
 
-    if (
-      validation.data &&
-      validation.data.oldPassword === validation.data.newPassword
-    ) {
+    if (formJson.oldPassword === formJson.newPassword) {
       setErrors({
-        ...validation.errors,
+        ...errors,
         newPassword: "New password must be different from current password",
       });
       return;
     }
 
-    if (
-      validation.data &&
-      validation.data.newPassword !== validation.data.confirmPassword
-    ) {
+    if (formJson.newPassword !== formJson.confirmPassword) {
       setErrors({
-        ...validation.errors,
+        ...errors,
         confirmPassword: "New password and confirm password do not match",
       });
       return;
     }
 
     try {
-      await axios.patch("/api/seller/updatepsaaword", formData);
-    } catch (error) {
+      setLoading(true);
+      const res = await axios.patch("/api/seller/updatepassword", formJson);
+      console.log(res.data.message);
+      closeModal();
+    } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
-        if (error.status === 403) {
+        const msg = error.response.data.message;
+        if (error.response.status === 403 || msg.includes("incorrect")) {
           setErrors({
             ...errors,
             oldPassword: "Current password is incorrect",
           });
-          return;
+        } else {
+          alert(msg || "Failed to update password");
         }
+      } else {
+        console.error(error);
+        alert("Unexpected error occurred");
       }
-      console.log("Failed to update password:", error);
+    } finally {
+      setLoading(false);
     }
-
-    closeModal();
   };
 
   return (
@@ -115,54 +111,33 @@ export default function ChangePassword({ closeModal }: Props) {
         </button>
         <h2 className="text-xl font-bold mb-4">Change Password</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-gray-500 text-sm">
-              Current Password
-            </label>
-            <input
-              type="password"
-              name="oldPassword"
-              onChange={handleChange}
-              className="w-full border-b border-gray-300 focus:outline-none py-1"
-            />
-            {errors.oldPassword && (
-              <p className="text-red-500 text-xs">{errors.oldPassword}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-500 text-sm">New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              onChange={handleChange}
-              className="w-full border-b border-gray-300 focus:outline-none py-1"
-            />
-            {errors.newPassword && (
-              <p className="text-red-500 text-xs">{errors.newPassword}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-500 text-sm">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              onChange={handleChange}
-              className="w-full border-b border-gray-300 focus:outline-none py-1"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
-            )}
-          </div>
+          {["oldPassword", "newPassword", "confirmPassword"].map((field) => (
+            <div key={field}>
+              <label className="block text-gray-500 text-sm">
+                {field === "oldPassword"
+                  ? "Current Password"
+                  : field === "newPassword"
+                  ? "New Password"
+                  : "Confirm Password"}
+              </label>
+              <input
+                type="password"
+                name={field}
+                onChange={handleChange}
+                className="w-full border-b border-gray-300 focus:outline-none py-1"
+              />
+              {errors[field] && (
+                <p className="text-red-500 text-xs">{errors[field]}</p>
+              )}
+            </div>
+          ))}
 
           <button
             type="submit"
-            className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            disabled={loading}
+            className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
           >
-            Update Password
+            {loading ? "Updating..." : "Update Password"}
           </button>
         </form>
       </div>

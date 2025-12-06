@@ -34,7 +34,11 @@ const validateForm = (formData: FormData) => {
   return { success: true, data: result.data, errors: {} };
 };
 
-export default function UpdateProduct({ params }: { params: { id: string } }) {
+export default function UpdateProduct({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
   const { id } = use(params);
 

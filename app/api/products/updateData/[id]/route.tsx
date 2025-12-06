@@ -4,9 +4,11 @@ import { cookies } from "next/headers";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Await params first
+    const { id } = await params;
     const cookieStore = await cookies();
     const jwt = cookieStore.get("jwt")?.value;
 
@@ -28,7 +30,7 @@ export async function PATCH(
 
     // Send request to your backend API
     const apiRes = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_URL}/product/updateproduct/data/${params.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/product/updateproduct/data/${id}`,
       JSON.stringify(data),
       {
         headers: {

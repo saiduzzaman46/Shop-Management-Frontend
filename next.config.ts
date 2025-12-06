@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
         port: "3000",
         pathname: "/product/getimage/**",
       },
+      {
+        protocol: "https",
+        hostname: "shop-management-backend-production.up.railway.app",
+        port: "",
+        pathname: "/product/getimage/**",
+      },
     ],
   },
 };

@@ -1,13 +1,16 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
+export async function POST() {
+  const cookieStore = await cookies();
 
-  res.setHeader("Set-Cookie", [
-    `jwt=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure`,
-  ]);
+  cookieStore.delete({
+    name: "jwt",
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
 
-  return res.status(200).json({ message: "Logged out successfully" });
+  return NextResponse.json({ message: "Logged out successfully" });
 }

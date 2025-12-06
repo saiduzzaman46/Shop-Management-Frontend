@@ -64,6 +64,20 @@ export default function ManageProduct() {
     fetchProducts();
   }, []);
 
+  // handle product delete event
+  useEffect(() => {
+    const handleProductDeleted = (e: any) => {
+      setProducts((prev) => prev.filter((p) => p.productId !== e.detail));
+      setFilteredProducts((prev) =>
+        prev.filter((p) => p.productId !== e.detail)
+      );
+    };
+
+    window.addEventListener("productDeleted", handleProductDeleted);
+    return () =>
+      window.removeEventListener("productDeleted", handleProductDeleted);
+  }, []);
+
   // filter logic
   useEffect(() => {
     let temp = [...products];
@@ -275,6 +289,23 @@ function ProductRow({ product }: { product: ProductResponse }) {
 }
 
 function ActionButtons({ productId }: { productId: string }) {
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      await axios.delete(`/api/products/delete/${productId}`);
+
+      // Dispatch event so parent updates UI
+      const event = new CustomEvent("productDeleted", { detail: productId });
+      window.dispatchEvent(event);
+
+      // alert("Product deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      alert("Error deleting product. Try again.");
+    }
+  };
+
   return (
     <div className="flex justify-center gap-2">
       <Link
@@ -283,7 +314,10 @@ function ActionButtons({ productId }: { productId: string }) {
       >
         Edit
       </Link>
-      <button className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
+      <button
+        onClick={handleDelete}
+        className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+      >
         Delete
       </button>
     </div>

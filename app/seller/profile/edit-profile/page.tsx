@@ -93,15 +93,12 @@ export default function EditProfile() {
 
     try {
       await axios.patch("/api/seller/update", formData);
-<<<<<<< HEAD
 
       const element = document.getElementById("user-fullname");
       if (element) {
         element.textContent = form.fullName;
       }
 
-=======
->>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
       router.push("/seller/profile");
     } catch (error: any) {
       console.error("Update failed:", error);

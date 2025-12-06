@@ -1,9 +1,13 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+<<<<<<< HEAD
 import { useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import axios from "axios";
+=======
+import { ChevronDown, ChevronRight } from "lucide-react";
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
 
 export default function ProfileDropdown({
   profile,
@@ -11,6 +15,7 @@ export default function ProfileDropdown({
   profile: { fullName: string } | null;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+<<<<<<< HEAD
   const router = useRouter();
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -27,6 +32,11 @@ export default function ProfileDropdown({
       console.error("Error logging out:", error);
     }
   };
+=======
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
   return (
     <div className="relative">
       <button
@@ -36,8 +46,13 @@ export default function ProfileDropdown({
         <span role="img" aria-label="user icon" className="text-xl">
           👤
         </span>
+<<<<<<< HEAD
         <span className="font-medium hidden sm:inline" id="user-fullname">
           {profile?.fullName || "User"}
+=======
+        <span className="font-medium hidden sm:inline">
+          {getMiddleName(profile?.fullName ?? "") || "User"}
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
         </span>
         {isOpen ? (
           <ChevronDown className="w-4 h-4" />
@@ -57,7 +72,11 @@ export default function ProfileDropdown({
           </Link>
           <div className="border-t border-gray-200 my-1"></div>
           <button
+<<<<<<< HEAD
             onClick={handleLogout}
+=======
+            // onClick={handleLogout}
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
             className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
           >
             Logout
@@ -68,6 +87,7 @@ export default function ProfileDropdown({
   );
 }
 
+<<<<<<< HEAD
 // function getMiddleName(fullName: string) {
 //   const parts = fullName.trim().split(/\s+/);
 
@@ -83,3 +103,20 @@ export default function ProfileDropdown({
 //     return parts[0];
 //   }
 // }
+=======
+function getMiddleName(fullName: string) {
+  const parts = fullName.trim().split(/\s+/);
+
+  if (parts[0].toLowerCase() === "md") {
+    parts.shift();
+  }
+
+  if (parts.length > 2) {
+    return parts.slice(1, -1).join(" ");
+  } else if (parts.length > 1) {
+    return parts[0];
+  } else {
+    return parts[0];
+  }
+}
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc

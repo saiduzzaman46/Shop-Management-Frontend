@@ -16,6 +16,7 @@ type Product = {
   brandName: string;
   categoryName: string;
   tags: string;
+<<<<<<< HEAD
   sellerId: string;
 };
 
@@ -38,6 +39,17 @@ export default function ProductDetail() {
   // const [message, setMessage] = useState("");
   // const [sending, setSending] = useState(false);
   // const [notificationCount, setNotificationCount] = useState(0);
+=======
+};
+
+export default function ProductDetail() {
+  const params = useParams();
+  const id = params.id as string;
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,6 +70,7 @@ export default function ProductDetail() {
     }
   }, [id]);
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   // Fetch notification count
   //   const fetchNotifications = async () => {
@@ -118,6 +131,8 @@ export default function ProductDetail() {
   //   }
   // };
 
+=======
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto p-6">
@@ -160,7 +175,11 @@ export default function ProductDetail() {
             Product Not Found
           </h2>
           <p className="text-gray-600">
+<<<<<<< HEAD
             The product you are looking for does not exist or may have been
+=======
+            The product you're looking for doesn't exist or may have been
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
             removed.
           </p>
         </div>
@@ -170,6 +189,7 @@ export default function ProductDetail() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<<<<<<< HEAD
       {/* Notification Bell */}
       {/* <div className="flex justify-end mb-6">
         <button
@@ -185,6 +205,8 @@ export default function ProductDetail() {
         </button>
       </div> */}
 
+=======
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
         {/* Product Images */}
         <div className="flex-1">
@@ -311,6 +333,7 @@ export default function ProductDetail() {
               <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
                 Add to Cart
               </button>
+<<<<<<< HEAD
               {/* <button
                 className="flex items-center justify-center text-gray-500 hover:text-gray-700 border border-gray-300 hover:border-gray-400 rounded-lg w-12 h-12 transition-colors"
                 onClick={() => setShowMessageModal(true)}
@@ -366,6 +389,28 @@ export default function ProductDetail() {
           </div>
         </div>
       )} */}
+=======
+              <button className="flex items-center justify-center text-gray-500 hover:text-gray-700 border border-gray-300 hover:border-gray-400 rounded-lg w-12 h-12 transition-colors">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
     </div>
   );
 }

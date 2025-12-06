@@ -24,7 +24,11 @@ export default function Sidebar({ className }: { className?: string }) {
       {/* Shop name */}
       <div className="h-16 flex items-center justify-center border-b">
         <Link href="/seller" className="text-xl font-bold text-indigo-600">
+<<<<<<< HEAD
           ShopSync
+=======
+          Shop<span className="text-gray-800">Management</span>
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
         </Link>
       </div>
 

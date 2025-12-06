@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< HEAD
 import { useEffect, useState, useMemo } from "react";
+=======
+import { useEffect, useState } from "react";
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
@@ -15,16 +19,20 @@ type Product = {
   categoryName: string;
 };
 
+<<<<<<< HEAD
 type FilterOptions = {
   categories: string[];
   brands: string[];
   priceRanges: { label: string; min: number; max: number }[];
 };
 
+=======
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter states
@@ -50,6 +58,13 @@ export default function HomePage() {
   );
 
   // Fetch products from API
+=======
+
+  // Filters
+  const [categoryFilter, setCategoryFilter] = useState<string>("All");
+  const [brandFilter, setBrandFilter] = useState<string>("All");
+
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -68,6 +83,7 @@ export default function HomePage() {
     fetchProducts();
   }, []);
 
+<<<<<<< HEAD
   // Apply filters and sorting
   useEffect(() => {
     let result = [...products];
@@ -146,6 +162,36 @@ export default function HomePage() {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+=======
+  // Filter products whenever filter changes
+  useEffect(() => {
+    let temp = [...products];
+
+    if (categoryFilter !== "All") {
+      temp = temp.filter((p) => p.categoryName === categoryFilter);
+    }
+
+    if (brandFilter !== "All") {
+      temp = temp.filter((p) => p.brandName === brandFilter);
+    }
+
+    setFilteredProducts(temp);
+  }, [categoryFilter, brandFilter, products]);
+
+  // Get unique categories and brands
+  const categories = [
+    "All",
+    ...Array.from(new Set(products.map((p) => p.categoryName))),
+  ];
+  const brands = [
+    "All",
+    ...Array.from(new Set(products.map((p) => p.brandName))),
+  ];
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto p-6">
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="border rounded-xl p-4 animate-pulse">
@@ -162,6 +208,7 @@ export default function HomePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<<<<<<< HEAD
       {/* Filter/Search */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -292,6 +339,60 @@ export default function HomePage() {
             >
               Clear All Filters
             </button>
+=======
+      <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+        Our Products
+      </h1>
+
+      {/* Filter Section */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="border rounded-lg p-2"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={brandFilter}
+          onChange={(e) => setBrandFilter(e.target.value)}
+          className="border rounded-lg p-2"
+        >
+          {brands.map((brand) => (
+            <option key={brand} value={brand}>
+              {brand}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {filteredProducts.length === 0 ? (
+        <div className="text-center py-12">
+          <div className="bg-gray-100 p-8 rounded-xl max-w-md mx-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-16 w-16 mx-auto text-gray-400 mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-16M9 9h6m-6 4h6m-6 4h6"
+              />
+            </svg>
+            <h2 className="text-xl font-semibold text-gray-700 mb-2">
+              No Products Found
+            </h2>
+            <p className="text-gray-500">Try changing your filters.</p>
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
           </div>
         </div>
       ) : (
@@ -313,7 +414,24 @@ export default function HomePage() {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+<<<<<<< HEAD
                     <span className="text-gray-400">No Image</span>
+=======
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-12 w-12 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+>>>>>>> be1a481e05294fec44cd313f2ee5b44461af1abc
                   </div>
                 )}
                 <div className="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
